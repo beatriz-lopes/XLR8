@@ -210,7 +210,7 @@ void followLine(){
   if(speedRight < speedMin) speedRight = speedMin;
   if(speedLeft  < speedMin) speedLeft  = speedMin;
 
-  int percent = 255*(speedMin/100);
+  int percent = 255*speedMin/100;
 
   speedRight = map(speedRight, speedMin, 100, percent, 255);
   speedLeft  = map(speedLeft,  speedMin, 100, percent, 255);
