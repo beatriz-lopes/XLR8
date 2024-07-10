@@ -278,12 +278,12 @@ void markerRight() {
 
   final++;
 
-  if(final >= 2) {
+  if(final >= 1) {
     offBuzzer();
     offLed();
     motorLeft.brake();
     motorRight.brake();
-    delay(5000);
+    delay(2500);
     auxDaVitoria = 0;
     final = 0;
     
@@ -467,6 +467,7 @@ void loop() {
       Serial.println(Kp);
       Serial.println(Kd);
       Serial.println(speedBase);
+      Serial.println(speedMin);
     }
   }
 }
