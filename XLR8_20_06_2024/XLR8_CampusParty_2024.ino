@@ -22,6 +22,7 @@ Motor motorRight = Motor(motorRightA, motorRightB, motorRightSpeed, offsetB, stb
 #define speedMax   100
 int speedMin = -20;
 int speedBase = 30;
+int controleLimite = 255;
 
 //Declarando variaveis do Array
 QTRSensors arraySensors;
@@ -57,7 +58,7 @@ uint16_t vSSLeft  = 0,
          vSSRight = 0;
 
 int media = 600;
-int final = 0;
+int finalaux = 0;
 int auxDaVitoria = 0;
 int BoostOn = 0;
 
@@ -212,9 +213,8 @@ void followLine(){
 
   int percent = 255*speedMin/100;
 
-  speedRight = map(speedRight, speedMin, 100, percent, 255);
-  speedLeft  = map(speedLeft,  speedMin, 100, percent, 255);
-
+  speedRight = map(speedRight, speedMin, 100, percent, controleLimite);
+  speedLeft  = map(speedLeft,  speedMin, 100, percent, controleLimite);
  
   //Atribui as velocidades aos motores
   motorLeft.drive(speedLeft);
@@ -276,16 +276,17 @@ void markerRight() {
   onLed();
   onBuzzer();
 
-  final++;
+  finalaux++;
+  Serial.println(finalaux);
 
-  if(final >= 1) {
+  if(finalaux >= 2) {
     offBuzzer();
     offLed();
     motorLeft.brake();
     motorRight.brake();
     delay(2500);
-    auxDaVitoria = 0;
-    final = 0;
+    //auxDaVitoria = 0;
+    finalaux = 0;
     
   } 
 }
@@ -459,15 +460,20 @@ void loop() {
       Kd += 0.25;
     }else if(dadoBluetooth == 'd'){ 
       Kd -= 0.25;
+    }else if(dadoBluetooth == 'Y'){
+      controleLimite += 25;
+    }else if(dadoBluetooth =='y'){
+      controleLimite -= 25;
+    }else if(dadoBluetooth == 'e'){
+      auxDaVitoria = 0;
     }
-
-
     
     if(dadoBluetooth != 'T' && dadoBluetooth != 'w'){
       Serial.println(Kp);
       Serial.println(Kd);
       Serial.println(speedBase);
       Serial.println(speedMin);
+      Serial.println(controleLimite);
     }
   }
 }
